@@ -4,9 +4,9 @@ import { validateEmailPassword } from '../utils/validate';
 import { isEmpty, isNil } from 'lodash';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from '../utils/firebase';
-import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { addUser } from '../utils/userSlice';
+import { BACKGROUND_IMAGE, PHOTO_URL } from '../utils/constants';
 
 const Login = () => {
 
@@ -16,7 +16,6 @@ const Login = () => {
     const email = useRef(null);
     const password = useRef(null);
 
-    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const clickHandler = (e) => {
@@ -31,11 +30,10 @@ const Login = () => {
     // Signed up 
     const user = userCredential.user;
     updateProfile(user, {
-        displayName: name.current.value, photoURL: "https://media.licdn.com/dms/image/C5103AQGFq4XhAtOsrg/profile-displayphoto-shrink_200_200/0/1516945916849?e=2147483647&v=beta&t=yw-e2m8h3aBed7U6PJigbOAtX4P2_gZpjkw9UyWgqP4"
+        displayName: name.current.value, photoURL: PHOTO_URL
       }).then(()=>{
         const {uid, email, displayName, photoURL} = auth.currentUser;
               dispatch(addUser({uid:uid, email:email, displayName:displayName, photoURL: photoURL}));
-              navigate('/browse');
       })
     
   })
@@ -51,7 +49,6 @@ const Login = () => {
     // Signed in 
     const user = userCredential.user;
     console.log({user})
-    navigate('/browse');
   })
   .catch((error) => {
     const errorCode = error.code;
@@ -68,7 +65,7 @@ const Login = () => {
         <div className='absolute'>
             <img
                 className=''
-                src='https://assets.nflxext.com/ffe/siteui/vlv3/ab180a27-b661-44d7-a6d9-940cb32f2f4a/7fb62e44-31fd-4e1f-b6ad-0b5c8c2a20ef/IN-en-20231009-popsignuptwoweeks-perspective_alpha_website_large.jpg'
+                src={BACKGROUND_IMAGE}
                 alt = 'login background'
             />
        </div>
